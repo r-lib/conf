@@ -1,0 +1,17 @@
+Package: configstore
+Title: Persistent Package Configuration
+Version: 0.0.0.9000
+Author: Gábor Csárdi
+Maintainer: Gábor Csárdi <csardi.gabor@gmail.com>
+Description: Store the configuration of your package in the user's
+    platform dependent config file directory. The configuration persists
+    across R sessions, and can also be edited manually. Configuration files
+    are YAML files.
+License: MIT + file LICENSE
+LazyData: true
+URL: https://github.com/gaborcsardi/configstore#readme
+BugReports: https://github.com/gaborcsardi/configstore/issues
+RoxygenNote: 6.0.1.9000
+Suggests: 
+    testthat
+Encoding: UTF-8
