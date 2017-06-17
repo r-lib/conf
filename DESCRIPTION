@@ -1,4 +1,4 @@
-Package: configstore
+Package: conf
 Title: Persistent Package Configuration
 Version: 0.0.0.9000
 Author: Gábor Csárdi
@@ -9,9 +9,19 @@ Description: Store the configuration of your package in the user's
     are YAML files.
 License: MIT + file LICENSE
 LazyData: true
-URL: https://github.com/gaborcsardi/configstore#readme
-BugReports: https://github.com/gaborcsardi/configstore/issues
+URL: https://github.com/gaborcsardi/conf#readme
+BugReports: https://github.com/gaborcsardi/conf/issues
 RoxygenNote: 6.0.1.9000
+Imports:
+    assertthat,
+    filelock,
+    rappdirs,
+    R6,
+    utils,
+    yaml
 Suggests: 
+    callr,
     testthat
+Remotes: 
+    gaborcsardi/filelock
 Encoding: UTF-8

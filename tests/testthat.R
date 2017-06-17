@@ -1,4 +1,4 @@
 library(testthat)
-library(configstore)
+library(conf)
 
-test_check("configstore")
+test_check("conf")
