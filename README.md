@@ -1,4 +1,6 @@
 
+
+
 # conf
 
 > Persistent Package Configuration
@@ -14,14 +16,62 @@ also be edited manually. Configuration files are YAML files.
 
 ## Installation
 
+
 ```r
 devtools::install_github("gaborcsardi/conf")
 ```
 
 ## Usage
 
+
 ```r
 library(conf)
+```
+
+`conf` uses the `rappdirs` package (https://github.com/hadley/rappdirs) to
+determine the appropriate location of the configuration file of a package.
+
+To determine the location of the configuration file, you can use:
+
+```r
+conf$new(package = "mypackage")$get_path()
+```
+
+```
+#> [1] "/Users/gaborcsardi/Library/Application Support/r-config/mypackage/config.yaml"
+```
+
+Create a configuration file by creating a `conf` object, then setting
+some configuration keys in it, and writing it out to a file:
+
+```r
+cf <- conf$new(package = "mypackage", lock = TRUE)
+```
+
+
+
+
+```r
+cf$set("user:id", "test-user")
+cf$set("user:email", "test@acme.com")
+cf$set("rversion", format(getRversion()))
+```
+
+
+```r
+cf
+```
+
+```
+#> user:
+#>   id: test-user
+#>   email: test@acme.com
+#> rversion: 3.3.3
+```
+
+
+```r
+cf$save()
 ```
 
 ## License

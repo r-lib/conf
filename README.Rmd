@@ -33,6 +33,38 @@ devtools::install_github("gaborcsardi/conf")
 library(conf)
 ```
 
+`conf` uses the `rappdirs` package (https://github.com/hadley/rappdirs) to
+determine the appropriate location of the configuration file of a package.
+
+To determine the location of the configuration file, you can use:
+```{r}
+conf$new(package = "mypackage")$get_path()
+```
+
+Create a configuration file by creating a `conf` object, then setting
+some configuration keys in it, and writing it out to a file:
+```{r eval = FALSE}
+cf <- conf$new(package = "mypackage", lock = TRUE)
+```
+
+```{r echo = FALSE, results = "hide"}
+cf <- conf$new(file = tempfile(), lock = TRUE)
+```
+
+```{r}
+cf$set("user:id", "test-user")
+cf$set("user:email", "test@acme.com")
+cf$set("rversion", format(getRversion()))
+```
+
+```{r}
+cf
+```
+
+```{r}
+cf$save()
+```
+
 ## License
 
 MIT © RStudio Inc
