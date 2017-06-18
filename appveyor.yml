@@ -43,3 +43,5 @@ artifacts:
 environment:
   global:
     USE_RTOOLS: true
+    GITHUB_PAT:
+      secure: Nkvazgyo9FBXlhdY1vdqGsSNJl/DjKXhBYRFd105iEpZxKAXWI5X1aQ/awLgCfWa
