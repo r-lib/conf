@@ -9,6 +9,7 @@
 [![Windows Build status](https://ci.appveyor.com/api/projects/status/github/gaborcsardi/conf?svg=true)](https://ci.appveyor.com/project/gaborcsardi/conf)
 [![](http://www.r-pkg.org/badges/version/conf)](http://www.r-pkg.org/pkg/conf)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/conf)](http://www.r-pkg.org/pkg/conf)
+[![Coverage Status](https://img.shields.io/codecov/c/github/gaborcsardi/conf/master.svg)](https://codecov.io/github/gaborcsardi/conf?branch=master)
 
 Store the configuration of your package in the user's platform dependent
 config file directory. The configuration persists across R sessions, and can
