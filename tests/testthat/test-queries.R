@@ -269,3 +269,18 @@ test_that("format", {
 
   expect_equal(cf$format(), yaml::as.yaml(cf$get()))
 })
+
+test_that("reload", {
+  tmp <- make_temp_conf(
+    data <- list(foo = list(bar = list(foobar = 1:10, baz = "yeah")),
+                 xxx = "hello")
+  )
+  on.exit(unlink(tmp), add = TRUE)
+  cf <- conf$new(file = tmp)
+
+  cf$set("xxx", "bye")
+  expect_equal(cf$get("xxx"), "bye")
+
+  cf$reload()
+  expect_equal(cf$get("xxx"), "hello")
+})

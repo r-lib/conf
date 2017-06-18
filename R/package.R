@@ -33,6 +33,8 @@ conf <- R6Class(
       cf_clear(self, private),
     save = function(path = NULL, unlock = TRUE)
       cf_save(self, private, path, unlock),
+    reload = function()
+      cf_reload(self, private),
     lock = function(exclusive = TRUE, timeout = Inf)
       cf_lock(self, private, exclusive, timeout),
     unlock = function()
@@ -158,6 +160,11 @@ cf_save <- function(self, private, path, unlock) {
 
   if (unlock) self$unlock()
 
+  invisible(self)
+}
+
+cf_reload <- function(self, private) {
+  private$data <- yaml.load_file(private$path)
   invisible(self)
 }
 
