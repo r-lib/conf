@@ -4,9 +4,122 @@
 \name{conf}
 \alias{conf}
 \alias{conf-package}
+\alias{conf}
 \title{Persistent Package Configuration}
 \description{
 Store the configuration of your package in the user's platform dependent
 config file directory. The configuration persists across R sessions,
 and can also be edited manually. Configuration files are YAML files.
+
+Class for Package Configuration
 }
+\section{Usage}{
+
+```
+cf <- conf$new(package = NULL, file = NULL, lock = NULL)
+
+cf$get(key = NULL, default = NULL)
+cf$set(key, value)
+cf$delete(key)
+cf$has(key)
+cf$get_keys(at = NULL)
+cf$clear()
+cf$save(path = NULL, unlock = TRUE)
+cf$reload()
+cf$lock(exclusive = TRUE, timeout = Inf)
+cf$unlock()
+cf$get_path()
+cf$print(...)
+cf$format()
+```
+}
+
+\section{Arguments}{
+
+* `package`: Package to configure. This cannot be specified together
+  with the `file` argument. The location of the configuration file will
+  be in the platform specific configuration directory, see
+  [rappdirs::user_config_dir()]. Alternatively the `file` argument can be
+  used to specify the configuration file directly.
+* `file`: Path to the configuration file. This cannot be specified
+  together with the `package` argument.
+* `lock`: Logical flag, whether to lock the configuration file before
+  opening it. Locking makes sure that no other R process (that uses the
+  `conf` package) will have read or write access to it. If you lock the
+  file, then it is a good idea to unlock it as soon as you don't need it.
+  See also the `lock()` and `unlock()` methods, and the `unlock` argument
+  of the `save()` method.
+* `key`: The key of the record to read or write or delete, etc.
+  It is a string scalar. The key can be nested, use `:` to
+  separate the components. I.e. the key `foo:bar:foobar` denotes the
+  `foobar` element within the `bar` element within the `foo` element.
+* `default`: The value to return if the specified key does not exist.
+* `value`: New value of the key. Any R object that can be converted to
+   YAML using the [yaml::as.yaml()] function.
+* `at`: A key, within which the names of the subkeys are listed.
+* `path`: Path to save the file to. Defaults to `NULL` which means the
+   path that was used when the object was created.
+* `unlock`: Logical flag. Whether to unlock the file, after saving.
+  If the file was not locked, then this flag does nothing.
+* `exclusive`: Whether to create an exclusive lock. See
+  [filelock::lock()]].
+* `timeout`: Timeout to acquire the lock. See [filelock::lock()].
+* `...`: Extra arguments, currently ignored. This is ignored to match
+  the signature of `base::print()`.
+}
+
+\section{Details}{
+
+
+`conf$new()` creates a new configuration object. Specify either the
+name of the package this file belongs to, or the path of the config
+file directly. You can also lock the file, which is a good idea if you
+already know that you'll modify it.
+
+`cf$get()` queries a record in the config file. By default it returns
+all configuration data. The YAML data will be converted to an R object
+via the [yaml::yaml.load_file()] function. Note that this function
+simplifies lists to vectors, if all elements are of the same type.
+
+`cf$set()` sets a record to a new value in the config file. The key
+of the record can be hierarchical, and missing levels are automatically
+created. I.e. if the configation file has a `foo` entry, but no
+`foo:bar` entry, and key is `foo:bar:foobar`, then `bar` and below that
+`foobar` will be created, within the existing `foo` entry. Note that
+`cf$set()` only modifies the configuration object, and not the file on
+disk. Call the `save()` method to modify the file. It is a good idea to
+lock the file before opening it, if you already know that you would
+modify it.
+
+`cf$delete()` deletes a record. Specifying a non-existant record does
+nothing. It is allowed to specify a hierarchical key.
+
+`cf$has()` decides whether a config file has the given key.
+
+`cf$get_keys()` lists the names of the keys within the given key.
+
+`cf$clear()` removes everything from the configuration file.
+
+`cf$save()` writes the configuration file to the disk. By default
+the file is unlocked after saving, if it was locked before.
+
+`cf$reload()` reloads the configuration.
+
+`cf$lock()` locks the configuration file, so other R processes will
+have no access to it. It is good practice to lock the file immediately
+when opening it, via the `lock` argument of the initialization. If you
+use the `lock()` method to lock it later, consider reloading the
+configation *after* locking it, in case another process has changed
+it between the previous reading the locking.
+
+`cf$unlock()` unlocks a configuration file.
+
+`cf$get_path()` returns the path to the configuration file that was
+specified when creating the `conf` object.
+
+`cf$print()` prints the configuration to the screen, in YAML format.
+
+`cf$format()` formats and returns the printout of the configuration,
+in YAML format.
+}
+

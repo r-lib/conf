@@ -2,7 +2,7 @@
 % Please edit documentation in R/package.R
 \name{cf_set}
 \alias{cf_set}
-\title{TODO: how does this work?}
+\title{Set a configuration item}
 \usage{
 cf_set(self, private, key, value)
 }
@@ -16,6 +16,28 @@ cf_set(self, private, key, value)
 \item{value}{Value to set.}
 }
 \description{
-TODO: how does this work?
+First we check common part in the key and the data.
+}
+\details{
+```
+data  key     common rest car(rest) cdr(rest) ops
+----- ---     ------ ---- --------- --------- --------------------
+a:b:0 a:b     a,b                             [[c(int, c)]] <- value
+a:b:0 a:b:c   a,b    c    c                   [[c(int, c)]] <- value
+a:b:0 a:b:c:d a,b    c,d  c         d         [[c(int, c)]] <- d:value
+a:0   a       a                               [[c(int, c)]] <- value
+a:0   x              x    x                   [[c(int, c)]] <- value
+      a              a    a                   [[c(int, a)]] <- value
+```
+
+Assuming that the tail of the data is a list, all we need to do is
+
+```
+data[[c(common, head(rest, 1))]] <- deep_list(tail(rest, -1), value)
+```
+
+where `deep_list` creates a deeply nested list. If `rest` is empty,
+then we are replacing an existing element in the data list. Otherwise
+we add a new element to the list at the specified level.
 }
 \keyword{internal}
