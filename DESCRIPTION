@@ -21,6 +21,7 @@ Imports:
     yaml
 Suggests: 
     callr,
+    covr,
     testthat
 Remotes: 
     gaborcsardi/filelock
