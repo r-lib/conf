@@ -309,6 +309,11 @@ cf_lock <- function(self, private, exclusive, timeout) {
     exclusive = exclusive,
     timeout = timeout
   )
+
+  if (is.null(private$filelock)) {
+    stop("Cannot lock config file ", sQuote(private$path))
+  }
+
   invisible(self)
 }
 
