@@ -311,7 +311,7 @@ cf_reload <- function(self, private) {
 #' @importFrom filelock lock unlock
 
 cf_lock <- function(self, private, exclusive, timeout) {
-  lock_file <- paste0(private$path, ".lock")
+  lock_file <- get_lock_name(private$path)
   private$filelock <- lock(
     lock_file,
     exclusive = exclusive,
@@ -319,7 +319,14 @@ cf_lock <- function(self, private, exclusive, timeout) {
   )
 
   if (is.null(private$filelock)) {
-    stop("Cannot lock config file ", sQuote(private$path))
+    e <- structure(
+      list(
+        message = paste0("File locking error on ", sQuote(private$path)),
+        call = sys.call(1)
+      ),
+      class = c("file_locking_error", "error", "condition")
+    )
+    stop(e)
   }
 
   invisible(self)

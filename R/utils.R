@@ -12,3 +12,7 @@ deep_list <- function(names, value) {
 empty_named_list <- function() {
   structure(list(), names = character())
 }
+
+get_lock_name <- function(path) {
+  paste0(path, ".lock")
+}

@@ -284,3 +284,23 @@ test_that("reload", {
   cf$reload()
   expect_equal(cf$get("xxx"), "hello")
 })
+
+test_that("error if cannot lock", {
+  tmp <- tempfile()
+  on.exit(unlink(tmp), add = TRUE)
+  lock <- get_lock_name(tmp)
+  bg <- callr::r_bg(
+    function(p) print(filelock::lock(p, exclusive = TRUE)),
+    stdout = "|", stderr = "|", args = list(lock)
+  )
+  bg$poll_io(2000)
+  on.exit(bg$kill(), add = TRUE)
+
+  expect_error(
+    conf$new(file = tmp, lock = TRUE,
+             lock_exclusive = TRUE, lock_timeout = 0 ),
+    class = "file_locking_error"
+  )
+
+  bg$kill()
+})
