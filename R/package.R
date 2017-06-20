@@ -14,7 +14,8 @@ NULL
 #'
 #' @section Usage:
 #' ```
-#' cf <- conf$new(package = NULL, file = NULL, lock = NULL)
+#' cf <- conf$new(package = NULL, file = NULL, lock = NULL,
+#'                 lock_exclusive = TRUE, lock_timeout = 1000)
 #'
 #' cf$get(key = NULL, default = NULL)
 #' cf$set(key, value)
@@ -45,6 +46,10 @@ NULL
 #'   file, then it is a good idea to unlock it as soon as you don't need it.
 #'   See also the `lock()` and `unlock()` methods, and the `unlock` argument
 #'   of the `save()` method.
+#' * `lock_exclusive`: Whether to request an exclusive lock. Typically
+#'   you need an exclusive lock if you intend to modify the configuration
+#'   file. See more at [filelock::lock()].
+#' * `lock_timeout`: Timeout parameter for locking, in milliseconds.
 #' * `key`: The key of the record to read or write or delete, etc.
 #'   It is a string scalar. The key can be nested, use `:` to
 #'   separate the components. I.e. the key `foo:bar:foobar` denotes the
@@ -126,8 +131,10 @@ conf <- R6Class(
   "conf",
 
   public = list(
-    initialize = function(package = NULL, file = NULL, lock = FALSE)
-      cf_init(self, private, package, file, lock),
+    initialize = function(package = NULL, file = NULL, lock = FALSE,
+                          lock_exclusive = TRUE, lock_timeout = 1000)
+      cf_init(self, private, package, file, lock, lock_exclusive,
+              lock_timeout),
     get = function(key = NULL, default = NULL)
       cf_get(self, private, key, default),
     set = function(key, value)
@@ -165,7 +172,8 @@ conf <- R6Class(
 
 #' @importFrom yaml yaml.load_file
 
-cf_init <- function(self, private, package, file, lock) {
+cf_init <- function(self, private, package, file, lock, lock_exclusive,
+                    lock_timeout) {
   assert_that(is_string_or_null(package))
   assert_that(is_string_or_null(file))
   assert_that(is_flag(lock))
@@ -181,7 +189,7 @@ cf_init <- function(self, private, package, file, lock) {
     get_package_config_file(package)
   }
 
-  if (lock) self$lock()
+  if (lock) self$lock(exclusive = lock_exclusive, timeout = lock_timeout)
 
   if (file.exists(private$path)) {
     private$data <- yaml.load_file(private$path)

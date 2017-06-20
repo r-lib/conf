@@ -16,7 +16,8 @@ Class for Package Configuration
 \section{Usage}{
 
 ```
-cf <- conf$new(package = NULL, file = NULL, lock = NULL)
+cf <- conf$new(package = NULL, file = NULL, lock = NULL,
+                lock_exclusive = TRUE, lock_timeout = 1000)
 
 cf$get(key = NULL, default = NULL)
 cf$set(key, value)
@@ -49,6 +50,10 @@ cf$format()
   file, then it is a good idea to unlock it as soon as you don't need it.
   See also the `lock()` and `unlock()` methods, and the `unlock` argument
   of the `save()` method.
+* `lock_exclusive`: Whether to request an exclusive lock. Typically
+  you need an exclusive lock if you intend to modify the configuration
+  file. See more at [filelock::lock()].
+* `lock_timeout`: Timeout parameter for locking, in milliseconds.
 * `key`: The key of the record to read or write or delete, etc.
   It is a string scalar. The key can be nested, use `:` to
   separate the components. I.e. the key `foo:bar:foobar` denotes the
