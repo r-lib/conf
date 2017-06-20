@@ -24,5 +24,6 @@ Suggests:
     covr,
     testthat
 Remotes: 
-    gaborcsardi/filelock
+    gaborcsardi/filelock,
+    r-lib/callr
 Encoding: UTF-8
