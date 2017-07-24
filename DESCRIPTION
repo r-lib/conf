@@ -9,8 +9,8 @@ Description: Store the configuration of your package in the user's
     are YAML files.
 License: MIT + file LICENSE
 LazyData: true
-URL: https://github.com/gaborcsardi/conf#readme
-BugReports: https://github.com/gaborcsardi/conf/issues
+URL: https://github.com/r-lib/conf#readme
+BugReports: https://github.com/r-lib/conf/issues
 RoxygenNote: 6.0.1.9000
 Imports:
     assertthat,
