@@ -24,8 +24,10 @@ also be edited manually. Configuration files are YAML files.
 
 ## Installation
 
+Once on CRAN, install the package with:
+
 ```{r eval = FALSE}
-devtools::install_github("r-lib/conf")
+install.packages("conf")
 ```
 
 ## Usage

@@ -17,9 +17,11 @@ also be edited manually. Configuration files are YAML files.
 
 ## Installation
 
+Once on CRAN, install the package with:
+
 
 ```r
-devtools::install_github("r-lib/conf")
+install.packages("conf")
 ```
 
 ## Usage
@@ -67,7 +69,7 @@ cf
 #> user:
 #>   id: test-user
 #>   email: test@acme.com
-#> rversion: 3.3.3
+#> rversion: 3.5.3
 ```
 
 
